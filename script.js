@@ -5,6 +5,7 @@ const gameBoard = (() => {
     const _board = [];
 
     const _update = function() {
+        if (_board[this.id] !== "") return;
         let newValue;
         if (counter%2 === 0) {
              newValue = "x";
@@ -14,12 +15,10 @@ const gameBoard = (() => {
         _board[this.id] = newValue;
         this.textContent = newValue.toUpperCase();
         counter++;
-        printBoard();
     }
 
     const init = () => {
         counter = 0;
-        const wrapper = document.querySelector(".board-wrapper");
         for (let i = 0; i < 9; i++) {
             _board[i] = "";
             const space = document.createElement("div");
@@ -27,15 +26,39 @@ const gameBoard = (() => {
             space.addEventListener("click",_update);
             space.textContent = _board[i];
             space.classList.add("space");
-            wrapper.appendChild(space);
+            document.querySelector(".board-wrapper").appendChild(space);
         }
+        document.querySelector("#reset").addEventListener("click",reset);
     }
-    const printBoard = () => console.log(_board);
+
+    const print = () => console.log(_board);
+
+    const reset = function() {
+        let i = 0;
+        document.querySelectorAll(".space").forEach( (space) => {
+            space.textContent = "";
+            _board[i++] = "";
+        });
+    }
 
     return {
         init,
-        printBoard,
+        print,
+        reset
     };
 })();
 
+
+const Player = function (name) {
+    const getName = function () {
+        return name;
+    }
+    return {getName};
+}
+
 gameBoard.init();
+
+const player1 = Player("person guy");
+const player2 = Player("computer computer");
+console.log(player1.getName());
+console.log(player2.getName());
