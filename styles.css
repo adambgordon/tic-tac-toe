@@ -6,8 +6,8 @@ html {
 
 .board-wrapper {
     margin: 5rem auto;
-    height: 20rem;
-    width: 20rem;
+    height: 21rem;
+    width: 21rem;
     display: grid;
     grid-template-columns: repeat(3,1fr);
     grid-template-rows: repeat(3,1fr);
@@ -16,8 +16,23 @@ html {
 .space {
     font-size: 3rem;
     font-weight: 300;
-    border: 1px solid black;
+
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.space:hover {
+    cursor: pointer;
+    background-color: rgb(240,240,240);
+}
+
+[id="3"], [id="4"], [id="5"] {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+[id="1"], [id="4"], [id="7"] {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }
