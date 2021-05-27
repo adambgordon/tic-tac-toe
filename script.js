@@ -7,9 +7,9 @@ let counter = 0;
 
 const gameBoard = (() => {
     const _board = [];
-    const _update = () => {
+    const _update = function() {
         console.log(this.id);
-    };
+    }
     const init = () => {
         const wrapper = document.querySelector(".board-wrapper");
         for (let i = 0; i < 9; i++) {
@@ -30,3 +30,8 @@ const gameBoard = (() => {
 })();
 
 gameBoard.init();
+
+
+// function update () {
+//     console.log(this.id);
+// }
