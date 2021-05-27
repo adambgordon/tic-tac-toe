@@ -1,8 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+html {
+    font-family: Quicksand, sans-serif;
+}
 
 .board-wrapper {
-    height: 10rem;
-    width: 10rem;
+    margin: 5rem auto;
+    height: 20rem;
+    width: 20rem;
     display: grid;
     grid-template-columns: repeat(3,1fr);
-    grid-template-rows: auto;
+    grid-template-rows: repeat(3,1fr);
+}
+
+.space {
+    font-size: 3rem;
+    font-weight: 300;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
