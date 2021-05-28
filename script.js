@@ -4,30 +4,62 @@ const gameBoard = (() => {
     let counter = 0;
     const _board = [];
 
-    const _checkSet = function (i,j,k) {
+    const _winningSets = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+    ];
+
+    const _checkSetForWinner = function (i,j,k) {
         if( _board[i] !== "" && _board[i] === _board[j] && _board[i] === _board[k]) {
             return _board[i];
         }
         return "none";
     };
+    
+
+    const _checkSetForOpening = function (newBoard,i,j,k) {
+        let sum = newBoard[i] + newBoard[j] + newBoard[k];
+        if (sum === 21) {
+            if (newBoard[i] === 1) return i;
+            if (newBoard[j] === 1) return j;
+            if (newBoard[k] === 1) return k;
+        }
+        return "none";
+    }
+
+    const _findOpening = function (newBoard) {
+        let openSpace;
+        let a;
+        let b;
+        let c;
+        for (let i = 0; i < _winningSets.length; i++) {
+            a = _winningSets[i][0];
+            b = _winningSets[i][1];
+            c = _winningSets[i][2];
+            openSpace = _checkSetForOpening(newBoard,a,b,c);
+            if (openSpace !== "none") return openSpace;
+        }
+        return openSpace;
+    }
 
     const _winner = function () {
-        let winner = _checkSet(0,1,2);
-        if (winner !== "none") return winner;
-        winner = _checkSet(3,4,5);
-        if (winner !== "none") return winner;
-        winner = _checkSet(6,7,8);
-        if (winner !== "none") return winner;
-        winner = _checkSet(0,3,6);
-        if (winner !== "none") return winner;
-        winner = _checkSet(1,4,7);
-        if (winner !== "none") return winner;
-        winner = _checkSet(2,5,8);
-        if (winner !== "none") return winner;
-        winner = _checkSet(0,4,8);
-        if (winner !== "none") return winner;
-        winner = _checkSet(2,4,6);
-        console.log(winner);
+        let winner;
+        let a;
+        let b;
+        let c;
+        for (let i = 0; i < _winningSets.length; i++) {
+            a = _winningSets[i][0];
+            b = _winningSets[i][1];
+            c = _winningSets[i][2];
+            winner = _checkSetForWinner(a,b,c);
+            if (winner !== "none") return winner;
+        }
         return winner;
     };
 
@@ -55,6 +87,19 @@ const gameBoard = (() => {
         reset();
     };
 
+    const winningSpace = function (playerChar) {
+        const newBoard = _board.slice();
+        for (let i = 0; i < _board.length; i++) {
+            if(_board[i] === playerChar) {
+                newBoard[i] = 10;
+            } else if (_board[i] === "") {
+                newBoard[i] = 1;
+            } else {
+                newBoard[i] = 0;
+            }
+        }
+        return _findOpening(newBoard);
+    };
 
     const updateAt = function (index) {
         let newValue;
@@ -118,21 +163,50 @@ const gameBoard = (() => {
         reset,
         openAt,
         updateAt,
+        winningSpace
     };
 })();
 
 
 const Player = function (name) {
-    const getName = function () {
-        return name;
-    };
-    const move = function () {
+    const _skillLevel = "hard";
+
+    const _randomMove = function () {
         let i;
         do {
             i = Math.floor(Math.random()*9);
         } while (!gameBoard.openAt(i));
         gameBoard.updateAt(i);
     };
+
+    const _smartMove = function () {
+        let i = gameBoard.winningSpace("o");
+
+
+        if (i !== "none") {
+            gameBoard.updateAt(i);
+        } else {
+            i = gameBoard.winningSpace("x");
+            if (i !== "none") {
+                gameBoard.updateAt(i);
+            } else {
+                _randomMove();
+            }
+        }
+    };
+
+    const getName = function () {
+        return name;
+    };
+
+    const move = function () {
+        if (_skillLevel === "hard") {
+            _smartMove();
+        } else {
+            _randomMove();
+        }
+    };
+    
     return {getName, move};
 };
 

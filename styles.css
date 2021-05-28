@@ -7,7 +7,27 @@ html {
 .title {
     font-size: 2rem;
     width: fit-content;
-    margin: 2rem auto 5rem;
+    margin: 2rem auto 0;
+}
+
+.marker-selection {
+    display: flex;
+    margin: 2rem auto 3rem;
+    width: 16rem;
+    justify-content: space-evenly;
+}
+
+.marker-selection div {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 4rem;
+    height: 2rem;
+    margin: 0 auto;
+    background-color: rgb(240,240,240);
+    border-radius: 3px;
 }
 
 .button {
@@ -44,7 +64,6 @@ html {
 .space {
     font-size: 3rem;
     font-weight: 300;
-
     display: flex;
     justify-content: center;
     align-items: center;
