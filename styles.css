@@ -55,6 +55,10 @@ html {
     background-color: rgb(255, 206, 126);
 }
 
+.button:focus {
+    outline: none;
+}
+
 .bottom-nav {
     font-size: .9rem;
     display: flex;
