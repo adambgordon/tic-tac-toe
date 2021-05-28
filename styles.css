@@ -4,8 +4,36 @@ html {
     font-family: Quicksand, sans-serif;
 }
 
-.board-wrapper {
-    margin: 5rem auto;
+.title {
+    font-size: 2rem;
+    width: fit-content;
+    margin: 2rem auto 5rem;
+}
+
+.button {
+    cursor: pointer;
+    width: fit-content;
+    margin: 0 auto;
+    background-color: rgb(240,240,240);
+    padding: 0.5rem;
+    border-radius: 3px;
+}
+
+.button:hover {
+    background-color: rgb(255, 206, 126);
+}
+
+#reset {
+    margin-top: 3rem;
+}
+.message {
+    font-size: 2rem;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.board {
+    margin: 0 auto;
     height: 21rem;
     width: 21rem;
     display: grid;
@@ -24,6 +52,9 @@ html {
 
 .space:hover {
     cursor: pointer;
+    background-color: rgb(255, 206, 126);
+}
+.marked:hover {
     background-color: rgb(240,240,240);
 }
 
@@ -36,3 +67,34 @@ html {
     border-left: 1px solid black;
     border-right: 1px solid black;
 }
+
+
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(1px);
+    overflow: auto;
+}
+
+.modal-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 1rem auto 0;
+    border-radius: 6px;
+    border: 1px solid lightgray;
+    box-shadow: 0 0 10px 2px lightgray;
+    width: 20rem;
+    height: 8rem;
+    background-color: white;
+}
+
+
+
