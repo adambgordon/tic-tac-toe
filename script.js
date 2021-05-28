@@ -64,6 +64,7 @@ const gameBoard = (() => {
     };
 
     const _receiveClick = function () {
+        if (computer.getMarker() !== "x" && computer.getMarker() !== "o") computer.setMarker("o");
         if (!openAt(this.id)) return;
         updateAt(this.id);
     };
@@ -75,7 +76,7 @@ const gameBoard = (() => {
         if (winner === "none") {
             message.textContent = "Tie";
         } else {
-            message.textContent = winner + " wins!";
+            message.textContent = winner.toUpperCase() + " wins!";
         }
         const modalBox = document.querySelector(".modal-box");
         modalBox.insertBefore(message,modalBox.firstElementChild);
@@ -85,6 +86,21 @@ const gameBoard = (() => {
         document.querySelector(".modal").style.display = "none";
         document.querySelector(".message").remove();
         reset();
+    };
+
+    const _selectO = function () {
+        if (computer.getMarker() === "x" || computer.getMarker() === "o") return;
+
+        document.querySelector("#x").classList.remove("selected");
+        document.querySelector("#o").classList.add("selected");
+
+        computer.setMarker("x");
+        computer.move();
+
+    }
+
+    const _updateDifficulty = function () {
+        computer.setSkillLevel(document.querySelector("#difficulty").value.toLowerCase());
     };
 
     const winningSpace = function (playerChar) {
@@ -120,8 +136,8 @@ const gameBoard = (() => {
                 return;
             }
         }
-        if (newValue === "x" && counter < 9) {
-            player2.move();
+        if (newValue !== computer.getMarker() && counter < 9) {
+            computer.move();
         }
     };
 
@@ -142,7 +158,9 @@ const gameBoard = (() => {
             document.querySelector(".board").appendChild(space);
         }
         document.querySelector("#reset").addEventListener("click",reset);
-        document.querySelector("#play-again").addEventListener("click",_playAgain)
+        document.querySelector("#play-again").addEventListener("click",_playAgain);
+        document.querySelector("#o").addEventListener("click",_selectO);
+        document.querySelector("#difficulty").onchange = _updateDifficulty;
     };
 
     const print = () => console.log(_board);
@@ -155,6 +173,17 @@ const gameBoard = (() => {
             if(space.classList.contains("marked")) space.classList.remove("marked");
             _board[i++] = "";
         });
+        if (computer.getMarker() === "x") {
+            document.querySelector("#o").classList.remove("selected");
+            document.querySelector("#x").classList.add("selected");
+        }
+        computer.setMarker("");
+        console.log(computer.getSkillLevel());
+        if (computer.getSkillLevel() === "hard") {
+            document.querySelector("#difficulty").selectedIndex = 0;
+            _updateDifficulty();
+        }
+        console.log(computer.getSkillLevel());
     };
 
     return {
@@ -169,7 +198,8 @@ const gameBoard = (() => {
 
 
 const Player = function (name) {
-    const _skillLevel = "hard";
+    let _skillLevel = "easy";
+    let _marker;
 
     const _randomMove = function () {
         let i;
@@ -198,21 +228,35 @@ const Player = function (name) {
     const getName = function () {
         return name;
     };
-
+    const getMarker = function () {
+        return _marker;
+    };
+    const setMarker = function (marker) {
+        _marker = marker;
+    };
+    const getSkillLevel = function () {
+        return _skillLevel;
+    };
+    const setSkillLevel = function (newSkillLevel) {
+        _skillLevel = newSkillLevel;
+    };
     const move = function () {
-        if (_skillLevel === "hard") {
+        if (getSkillLevel() === "hard") {
             _smartMove();
         } else {
             _randomMove();
         }
     };
     
-    return {getName, move};
+    return {
+        getName,
+        move,
+        getMarker,
+        setMarker,
+        getSkillLevel,
+        setSkillLevel
+    };
 };
 
 gameBoard.init();
-
-const player1 = Player("person guy");
-const player2 = Player("computer computer");
-console.log(player1.getName());
-console.log(player2.getName());
+const computer = Player("computer");

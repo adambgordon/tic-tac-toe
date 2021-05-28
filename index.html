@@ -8,12 +8,18 @@
     <body>
         <div class="title">Tic Tac Toe</div>
         <div class="marker-selection">
-            <div>X</div>
-            <div>O</div>
+            <div id="x" class="selected">X</div>
+            <div id="o">O</div>
         </div>
         <div class="board"></div>
-        <div class="button" id="reset">Reset</div>
-
+        
+        <div class="bottom-nav">
+            <select class="button" id="difficulty">
+                <option>Easy</option>
+                <option>Hard</option>
+            </select>
+            <div class="button" id="reset">Reset</div>
+        </div>
         <div class="modal">
             <div class="modal-box">
                 <div class="button" id="play-again">Play Again</div>
