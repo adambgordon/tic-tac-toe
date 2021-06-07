@@ -95,7 +95,7 @@ const gameBoard = (() => {
         document.querySelector("#o").classList.add("selected");
 
         computer.setMarker("x");
-        computer.move();
+        setTimeout(computer.move,350);
 
     }
 
@@ -132,12 +132,12 @@ const gameBoard = (() => {
         if (counter >=5) {
             const winner = _winner();
             if (winner !== "none" || counter === 9) {
-                _endGame(winner);
+                setTimeout(function(){_endGame(winner)},500);
                 return;
             }
         }
         if (newValue !== computer.getMarker() && counter < 9) {
-            computer.move();
+            setTimeout(computer.move,350);
         }
     };
 
@@ -241,6 +241,7 @@ const Player = function (name) {
         _skillLevel = newSkillLevel;
     };
     const move = function () {
+
         if (getSkillLevel() === "hard") {
             _smartMove();
         } else {

@@ -111,6 +111,22 @@ html {
     background-color: rgb(240,240,240);
 }
 
+.marked {
+    animation: fade-in 300ms;
+}
+
+@keyframes fade-in {
+    0% {
+        color: rgba(0,0,0,0%);
+        font-size: 5rem;
+    }
+    100% {
+        color: rgba(0,0,0,100%);
+        font-size: 3rem;
+    }
+}
+
+
 [id="3"], [id="4"], [id="5"] {
     border-top: 1px solid black;
     border-bottom: 1px solid black;
@@ -120,7 +136,6 @@ html {
     border-left: 1px solid black;
     border-right: 1px solid black;
 }
-
 
 .modal {
     display: none;
