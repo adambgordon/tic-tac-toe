@@ -1,9 +1,11 @@
+/* MODULES & FUNCTIONS */
 
-
+// gameBoard module
 const gameBoard = (() => {
     let counter = 0;
     const _board = [];
 
+    // indices of all 8 valid sets of 3 spaces
     const _winningSets = [
         [0,1,2],
         [3,4,5],
@@ -15,6 +17,7 @@ const gameBoard = (() => {
         [2,4,6]
     ];
 
+    // returns x, o, or none the given set of three spaces is a winning set
     const _checkSetForWinner = function (i,j,k) {
         if( _board[i] !== "" && _board[i] === _board[j] && _board[i] === _board[k]) {
             return _board[i];
@@ -22,7 +25,7 @@ const gameBoard = (() => {
         return "none";
     };
     
-
+    // check for a potential winning space given a set of three spaces (using a copy of the board i.e. 10-1-0 space assignments)
     const _checkSetForOpening = function (newBoard,i,j,k) {
         let sum = newBoard[i] + newBoard[j] + newBoard[k];
         if (sum === 21) {
@@ -33,6 +36,7 @@ const gameBoard = (() => {
         return "none";
     }
 
+    // finds a potential winning space cycling through the entire board
     const _findOpening = function (newBoard) {
         let openSpace;
         let a;
@@ -48,6 +52,7 @@ const gameBoard = (() => {
         return openSpace;
     }
 
+    // checks the whole board for a winning set, returning x, o, or none
     const _winner = function () {
         let winner;
         let a;
@@ -63,14 +68,15 @@ const gameBoard = (() => {
         return winner;
     };
 
+    // receives user click on a space
     const _receiveClick = function () {
         if (computer.getMarker() !== "x" && computer.getMarker() !== "o") computer.setMarker("o");
         if (!openAt(this.id)) return;
         updateAt(this.id);
     };
 
+    // ends the game and displays modal dialog box
     const _endGame = function (winner) {
-        // document.querySelector(".modal").style.display = "block";
         document.querySelector(".modal").classList.add("modal-displayed");
         const message = document.createElement("div");
         message.classList.add("message");
@@ -83,13 +89,15 @@ const gameBoard = (() => {
         modalBox.insertBefore(message,modalBox.firstElementChild);
     };
 
+    // closes modal dialog and resets the board
     const _playAgain = function () {
-        // document.querySelector(".modal").style.display = "none";
+        reset();
         document.querySelector(".modal").classList.remove("modal-displayed");
         document.querySelector(".message").remove();
-        reset();
     };
 
+    // function called when user chooses "o" at the start of the game
+    // and calls computer to make first move as "x"
     const _selectO = function () {
         if (computer.getMarker() === "x" || computer.getMarker() === "o") return;
 
@@ -101,10 +109,17 @@ const gameBoard = (() => {
 
     }
 
+    // changes computer diffuculty setting
     const _updateDifficulty = function () {
         computer.setSkillLevel(document.querySelector("#difficulty").value.toLowerCase());
     };
 
+    // returns the potential winning open space on the board for the given player ("x" or "o").
+    // note: this function builds a copy of the game board, replacing
+    // player spaces with 10's, open spaces with 1's, and opponent space with 0's
+    // allowing the _findOpening function to look for sets totaling 21.
+    // This both keeps the function agnostic to "x" or "o" instead relying on the parameter when called
+    // and keeps the function agnostic to set order (e.g. x-x vs. xx- vs. -xx).
     const winningSpace = function (playerChar) {
         const newBoard = _board.slice();
         for (let i = 0; i < _board.length; i++) {
@@ -119,6 +134,8 @@ const gameBoard = (() => {
         return _findOpening(newBoard);
     };
 
+    // updates the game board at a given index.
+    // a counter is built-in to ensure moves alternate between x and o
     const updateAt = function (index) {
         let newValue;
         if (counter%2 === 0) {
@@ -131,7 +148,7 @@ const gameBoard = (() => {
         const space = document.querySelector(`[id="${index}"`);
         space.textContent = newValue.toUpperCase();
         space.classList.add("marked");
-        if (counter >=5) {
+        if (counter >=5) { // winning in less than 5 combined moves is impossible -> saves computation and memory
             const winner = _winner();
             if (winner !== "none" || counter === 9) {
                 setTimeout(function(){_endGame(winner)},500);
@@ -143,11 +160,12 @@ const gameBoard = (() => {
         }
     };
 
-    
+    // returns boolean if space is open
     const openAt = function (index) {
         return _board[index] === "";
     };
 
+    // initializes the gameBoard module (builds spaces and adds listeners)
     const init = () => {
         counter = 0;
         for (let i = 0; i < 9; i++) {
@@ -165,8 +183,11 @@ const gameBoard = (() => {
         document.querySelector("#difficulty").onchange = _updateDifficulty;
     };
 
+    // helper function to log board array to console
     const print = () => console.log(_board);
 
+    // resets the game baord by clearing all spaces in both the array and DOM
+    // also clears games settings and added classes as necessary
     const reset = function() {
         counter = 0;
         let i = 0;
@@ -180,12 +201,10 @@ const gameBoard = (() => {
             document.querySelector("#x").classList.add("selected");
         }
         computer.setMarker("");
-        console.log(computer.getSkillLevel());
         if (computer.getSkillLevel() === "hard") {
             document.querySelector("#difficulty").selectedIndex = 0;
             _updateDifficulty();
         }
-        console.log(computer.getSkillLevel());
     };
 
     return {
@@ -199,10 +218,13 @@ const gameBoard = (() => {
 })();
 
 
+// player factory function
+// (only ended up making computer player object for simplicity)
 const Player = function (name) {
     let _skillLevel = "easy";
     let _marker;
 
+    // player (computer) moves to random open space
     const _randomMove = function () {
         let i;
         do {
@@ -211,6 +233,10 @@ const Player = function (name) {
         gameBoard.updateAt(i);
     };
 
+    // player moves to "smart" open space, priority being:
+    // 1 - an open winning space for the player (computer)
+    // 2 - an open winning space for the opponent
+    // 3 - a random open space
     const _smartMove = function () {
         let i = gameBoard.winningSpace("o");
 
@@ -242,8 +268,9 @@ const Player = function (name) {
     const setSkillLevel = function (newSkillLevel) {
         _skillLevel = newSkillLevel;
     };
-    const move = function () {
 
+    // makes the move based on chosen skill level
+    const move = function () {
         if (getSkillLevel() === "hard") {
             _smartMove();
         } else {
@@ -260,6 +287,8 @@ const Player = function (name) {
         setSkillLevel
     };
 };
+
+/* MAIN CODE */
 
 gameBoard.init();
 const computer = Player("computer");
