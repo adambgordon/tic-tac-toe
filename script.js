@@ -70,7 +70,8 @@ const gameBoard = (() => {
     };
 
     const _endGame = function (winner) {
-        document.querySelector(".modal").style.display = "block";
+        // document.querySelector(".modal").style.display = "block";
+        document.querySelector(".modal").classList.add("modal-displayed");
         const message = document.createElement("div");
         message.classList.add("message");
         if (winner === "none") {
@@ -83,7 +84,8 @@ const gameBoard = (() => {
     };
 
     const _playAgain = function () {
-        document.querySelector(".modal").style.display = "none";
+        // document.querySelector(".modal").style.display = "none";
+        document.querySelector(".modal").classList.remove("modal-displayed");
         document.querySelector(".message").remove();
         reset();
     };
