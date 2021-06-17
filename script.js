@@ -201,10 +201,10 @@ const gameBoard = (() => {
             document.querySelector("#x").classList.add("selected");
         }
         computer.setMarker("");
-        if (computer.getSkillLevel() === "hard") {
-            document.querySelector("#difficulty").selectedIndex = 0;
-            _updateDifficulty();
-        }
+        // if (computer.getSkillLevel() === "hard") {
+        //     document.querySelector("#difficulty").selectedIndex = 0;
+        //     _updateDifficulty();
+        // }
     };
 
     return {
